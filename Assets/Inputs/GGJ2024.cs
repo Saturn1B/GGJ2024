@@ -44,6 +44,15 @@ public partial class @GGJ2024 : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Face"",
+                    ""type"": ""Button"",
+                    ""id"": ""57cdb721-6cd9-4a2d-a30f-9c6f9b9e5acb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -66,6 +75,17 @@ public partial class @GGJ2024 : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Eye"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""015b479c-cf86-4eb0-85f5-f2cbb2afd67a"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Face"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -655,6 +675,7 @@ public partial class @GGJ2024 : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Mouth = m_Player.FindAction("Mouth", throwIfNotFound: true);
         m_Player_Eye = m_Player.FindAction("Eye", throwIfNotFound: true);
+        m_Player_Face = m_Player.FindAction("Face", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -728,12 +749,14 @@ public partial class @GGJ2024 : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Mouth;
     private readonly InputAction m_Player_Eye;
+    private readonly InputAction m_Player_Face;
     public struct PlayerActions
     {
         private @GGJ2024 m_Wrapper;
         public PlayerActions(@GGJ2024 wrapper) { m_Wrapper = wrapper; }
         public InputAction @Mouth => m_Wrapper.m_Player_Mouth;
         public InputAction @Eye => m_Wrapper.m_Player_Eye;
+        public InputAction @Face => m_Wrapper.m_Player_Face;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -749,6 +772,9 @@ public partial class @GGJ2024 : IInputActionCollection2, IDisposable
                 @Eye.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEye;
                 @Eye.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEye;
                 @Eye.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnEye;
+                @Face.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFace;
+                @Face.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFace;
+                @Face.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnFace;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -759,6 +785,9 @@ public partial class @GGJ2024 : IInputActionCollection2, IDisposable
                 @Eye.started += instance.OnEye;
                 @Eye.performed += instance.OnEye;
                 @Eye.canceled += instance.OnEye;
+                @Face.started += instance.OnFace;
+                @Face.performed += instance.OnFace;
+                @Face.canceled += instance.OnFace;
             }
         }
     }
@@ -917,6 +946,7 @@ public partial class @GGJ2024 : IInputActionCollection2, IDisposable
     {
         void OnMouth(InputAction.CallbackContext context);
         void OnEye(InputAction.CallbackContext context);
+        void OnFace(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
